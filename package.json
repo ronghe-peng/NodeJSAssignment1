@@ -1,0 +1,15 @@
+{
+  "name": "assignment1",
+  "version": "1.0.0",
+  "description": "Assignement for node JS",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Cindy Peng",
+  "license": "ISC",
+  "dependencies": {
+    "lowdb": "^1.0.0"
+  }
+}
