@@ -51,20 +51,30 @@ exports.getCart = () => {
 
 // Delet items in shoppingcart
 
-exports.deletCart = async (name, price, picture) => {
+exports.deletCart = async name => {
   const response = await database
     .get("shoppingcart")
-    .remove({ name: name, price: price, picture: picture })
+    .remove({ name: name })
     .write();
   return response;
 };
 
-// Check if item exist in shoppingcart
+// Check if item exist in shoppingcart for POST
 
-exports.shopedItem = (name, price, picture) => {
+exports.shoppingcartItem = (name, price, picture) => {
   const response = database
     .get("shoppingcart")
     .find({ name: name, price: price, picture: picture })
+    .value();
+  return response;
+};
+
+// Check if item exist in shoppingcart for DELETE
+
+exports.shopedItem = (name /*, price, picture*/) => {
+  const response = database
+    .get("shoppingcart")
+    .find({ name: name /*, price: price, picture: picture*/ })
     .value();
   return response;
 };

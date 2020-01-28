@@ -9,24 +9,35 @@ module.exports = app => {
     const price = request.query.price;
     const picture = request.query.picture;
 
+    const existItem = database.availableProduct(name, price, picture); // Export function from 'database.js'
+
     let message = {
       success: true,
       message: "Product added"
     };
 
-    if (database) {
-      //Insert item in product list
-      const res = database.insertProduct(name, price, picture);
-      message.data = res[0];
-      response.send(message);
-    } else {
+    if (existItem) {
+      // Check if item is already in product list
+      // Send message if item is already in product list
+      const errorMessage4 = {
+        error: "ERROR",
+        message: "Item is already in product list"
+      };
+      response.send(errorMessage4);
+    } else if (!database) {
       // 404
       const errorMessage = {
         error: "ERROR",
         message: "Ops, something went worng"
       };
       response.send(errorMessage);
+    } else {
+      // Insert product
+      const res = database.insertProduct(name, price, picture);
+      message.data = res[0];
+      response.send(message);
     }
+    // 404
   });
 
   // Operate get all products
@@ -77,7 +88,7 @@ module.exports = app => {
     };
 
     // Operate
-    const checkShopedItem = database.shopedItem(name, price, picture); // Export function from 'database.js'
+    const checkShopedItem = database.shoppingcartItem(name, price, picture); // Export function from 'database.js'
     const checkProducts = database.availableProduct(name, price, picture); // Export function from 'database.js'
 
     if (checkShopedItem) {
@@ -112,23 +123,21 @@ module.exports = app => {
     }
   });
   // Operate delete
-  app.delete("/api/shoppingcart", async (request, response) => {
+  app.delete("/api/shoppingcart/:name", async (request, response) => {
     console.log(request.url);
-    const name = request.query.name;
-    const price = request.query.price;
-    const picture = request.query.picture;
+    const name = request.params.name;
 
     let message = {
       success: true,
       message: "Item deleted"
     };
 
-    const checkShopedItem = database.shopedItem(name, price, picture); // Export function from 'database.js'
+    const checkShopedItem = database.shopedItem(name); // Export function from 'database.js'
 
     if (checkShopedItem) {
       //  Check if item exist in shoppingcart
       //  Delete item
-      const res = database.deletCart(name, price, picture);
+      const res = database.deletCart(name);
       message.data = res[0];
       response.send(message);
     } else if (!database) {
@@ -144,6 +153,7 @@ module.exports = app => {
         error: "ERROR",
         message: "Item is not in shoppingcart"
       };
+      console.log(checkShopedItem);
       response.send(errorMessage3);
     }
   });
