@@ -51,7 +51,7 @@ exports.getCart = () => {
 
 // Delet items in shoppingcart
 
-exports.deletCart = async name => {
+exports.deleteCart = async name => {
   const response = await database
     .get("shoppingcart")
     .remove({ name: name })

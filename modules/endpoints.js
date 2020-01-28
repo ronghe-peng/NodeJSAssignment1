@@ -137,7 +137,7 @@ module.exports = app => {
     if (checkShopedItem) {
       //  Check if item exist in shoppingcart
       //  Delete item
-      const res = database.deletCart(name);
+      const res = database.deleteCart(name);
       message.data = res[0];
       response.send(message);
     } else if (!database) {
