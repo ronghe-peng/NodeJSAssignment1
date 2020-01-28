@@ -14,23 +14,53 @@ module.exports = app => {
       message: "Product added"
     };
 
-    const res = database.insertProduct(name, price, picture);
-    message.data = res[0];
-    response.send(message);
+    if (database) {
+      //Insert item in product list
+      const res = database.insertProduct(name, price, picture);
+      message.data = res[0];
+      response.send(message);
+    } else {
+      // 404
+      const errorMessage = {
+        error: "ERROR",
+        message: "Ops, something went worng"
+      };
+      response.send(errorMessage);
+    }
   });
 
   // Operate get all products
 
   app.get("/api/product", async (request, response) => {
-    const data = database.getProducts();
-    response.send(data);
+    if (database) {
+      // Get items in shoppingcart
+      const data = database.getProducts();
+      response.send(data);
+    } else {
+      // 404
+      const errorMessage = {
+        error: "ERROR",
+        message: "Ops, something went worng"
+      };
+      response.send(errorMessage);
+    }
   });
 
   // Operate get shoppingcart
 
   app.get("/api/shoppingcart", async (request, response) => {
-    const data = database.getCart();
-    response.send(data);
+    if (database) {
+      // Get items in shoppingcart
+      const data = database.getCart();
+      response.send(data);
+    } else {
+      // 404
+      const errorMessage = {
+        error: "ERROR",
+        message: "Ops, something went worng"
+      };
+      response.send(errorMessage);
+    }
   });
 
   // Operate insert to shoppingcart
@@ -54,6 +84,7 @@ module.exports = app => {
       //  Check if item exist in shoppingcart
       console.log(checkShopedItem);
       const errorMessage1 = {
+        // Send message if item is already in shoppingcart
         error: "ERROR",
         message: "Item is already selected"
       };
@@ -61,10 +92,18 @@ module.exports = app => {
     } else if (!checkProducts) {
       //  Check if item exist in product list
       const errorMessage2 = {
+        // Send message if item is not in product list
         error: "ERROR",
         message: "Item is not available"
       };
       response.send(errorMessage2);
+    } else if (!database) {
+      // 404
+      const errorMessage = {
+        error: "ERROR",
+        message: "Ops, something went worng"
+      };
+      response.send(errorMessage);
     } else {
       // Insert item
       const res = database.insertCart(name, price, picture);
@@ -92,12 +131,20 @@ module.exports = app => {
       const res = database.deletCart(name, price, picture);
       message.data = res[0];
       response.send(message);
-    } else {
+    } else if (!database) {
+      // 404
       const errorMessage = {
+        error: "ERROR",
+        message: "Ops, something went worng"
+      };
+      response.send(errorMessage);
+    } else {
+      // Send message if item is not in shoppingcart
+      const errorMessage3 = {
         error: "ERROR",
         message: "Item is not in shoppingcart"
       };
-      response.send(errorMessage);
+      response.send(errorMessage3);
     }
   });
 };
