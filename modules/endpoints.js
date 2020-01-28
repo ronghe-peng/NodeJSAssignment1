@@ -23,21 +23,20 @@ module.exports = app => {
         error: "ERROR",
         message: "Item is already in product list"
       };
-      response.send(errorMessage4);
+      response.status(500).send(errorMessage4);
     } else if (!database) {
       // 404
       const errorMessage = {
         error: "ERROR",
         message: "Ops, something went worng"
       };
-      response.send(errorMessage);
+      response.status(404).send(errorMessage);
     } else {
       // Insert product
       const res = database.insertProduct(name, price, picture);
       message.data = res[0];
       response.send(message);
     }
-    // 404
   });
 
   // Operate get all products
@@ -53,7 +52,7 @@ module.exports = app => {
         error: "ERROR",
         message: "Ops, something went worng"
       };
-      response.send(errorMessage);
+      response.status(404).send(errorMessage);
     }
   });
 
@@ -70,7 +69,7 @@ module.exports = app => {
         error: "ERROR",
         message: "Ops, something went worng"
       };
-      response.send(errorMessage);
+      response.status(404).send(errorMessage);
     }
   });
 
@@ -99,7 +98,7 @@ module.exports = app => {
         error: "ERROR",
         message: "Item is already selected"
       };
-      response.send(errorMessage1);
+      response.status(500).send(errorMessage1);
     } else if (!checkProducts) {
       //  Check if item exist in product list
       const errorMessage2 = {
@@ -107,14 +106,14 @@ module.exports = app => {
         error: "ERROR",
         message: "Item is not available"
       };
-      response.send(errorMessage2);
+      response.status(500).send(errorMessage2);
     } else if (!database) {
       // 404
       const errorMessage = {
         error: "ERROR",
         message: "Ops, something went worng"
       };
-      response.send(errorMessage);
+      response.status(404).send(errorMessage);
     } else {
       // Insert item
       const res = database.insertCart(name, price, picture);
@@ -146,7 +145,7 @@ module.exports = app => {
         error: "ERROR",
         message: "Ops, something went worng"
       };
-      response.send(errorMessage);
+      response.status(404).send(errorMessage);
     } else {
       // Send message if item is not in shoppingcart
       const errorMessage3 = {
@@ -154,7 +153,7 @@ module.exports = app => {
         message: "Item is not in shoppingcart"
       };
       console.log(checkShopedItem);
-      response.send(errorMessage3);
+      response.status(500).send(errorMessage3);
     }
   });
 };
